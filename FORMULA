@@ -1,0 +1,14 @@
+# vim: set syntax=yaml ts=2 sw=2 sts=2 et :
+
+package-name:   qubes-saltstack-formulas-bind
+saltenv:        base
+version:        1.0.0
+release:        1
+name:           saltstack-formulas-bind
+top_level_dir:  bind
+formula-files:  bind LICENSE README.md
+formula_dir:    $(MGMT_DEFAULT_FORMULA_DIR)/$(MGMT_SALTENV)/$(MGMT_NAME)
+os:             Qubes
+os_family:      RedHat
+summary:        saltstack-formulas-bind
+description:    saltstack-formulas-bind

@@ -1,0 +1,43 @@
+Name:		qubes-saltstack-formulas-bind
+Version:	@VERSION@
+Release:	@REL@
+Summary:	saltstack-formulas-bind
+
+Group:		System administration tools
+License:	GPL 2.0
+BuildArch:  noarch
+URL:		https://www.qubes-os.org/
+Source:	%{name}-%{version}.tar.gz
+
+Patch0: 0001-Cache-necessary-files-for-rendering.patch
+
+Requires:	qubes-mgmt-salt
+
+
+%description
+
+
+%prep
+%autosetup -N
+mv bind-formula/bind .
+%autopatch -p1
+
+%build
+
+
+%install
+make install DESTDIR=%{buildroot} LIBDIR=%{_libdir} BINDIR=%{_bindir} SBINDIR=%{_sbindir} SYSCONFDIR=%{_sysconfdir}
+
+
+%files
+%defattr(-,root,root)
+%doc LICENSE README.md
+%attr(750, root, root) %dir /srv/formulas/base/saltstack-formulas-bind
+/srv/formulas/base/saltstack-formulas-bind/README.md
+/srv/formulas/base/saltstack-formulas-bind/LICENSE
+/srv/formulas/base/saltstack-formulas-bind/bind
+
+%config(noreplace) /etc/salt/minion.d/saltstack-formulas-bind.conf
+
+%changelog
+@CHANGELOG@

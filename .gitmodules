@@ -1,0 +1,4 @@
+[submodule "bind-formula"]
+	path = bind-formula
+	url = https://github.com/saltstack-formulas/bind-formula
+	branch = master
