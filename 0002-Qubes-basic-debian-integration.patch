@@ -1,0 +1,48 @@
+From c7b63d2d8f8e51c793e883d5c34ad4c5af632301 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Fr=C3=A9d=C3=A9ric=20Pierret=20=28fepitre=29?=
+ <frederic.pierret@qubes-os.org>
+Date: Sat, 22 Jun 2019 11:36:16 +0200
+Subject: [PATCH] Qubes: basic debian integration
+
+---
+ bind/init.sls | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/bind/init.sls b/bind/init.sls
+index ae5bfb2..04fdc30 100644
+--- a/bind/init.sls
++++ b/bind/init.sls
+@@ -12,6 +12,30 @@ cache_reverse_zone_jinja:
+     - cached
+     - name: salt://bind/reverse_zone.jinja
+ 
++/rw/bind-dirs{{ map.log_dir }}:
++  file.directory:
++    - makedirs: True
++    - user: bind
++    - group: bind
++    - mode: 775
++
++/rw/config/qubes-bind-dirs.d/bind.conf:
++  file.managed:
++    - makedirs: True
++    - mode: 0600
++    - contents: |
++        binds+=( '{{ map.named_directory }}' )
++        binds+=( '{{ map.log_dir }}' )
++{% if grains['os_family'] == 'Debian' %}
++        binds+=( '/etc/bind' )
++{% endif %}
++
++bind-dirs:
++  cmd.run:
++    - name: /usr/lib/qubes/bind-dirs.sh umount && /usr/lib/qubes/bind-dirs.sh
++    - require:
++        - file: /rw/config/qubes-bind-dirs.d/bind.conf
++
+ bind:
+   pkg.installed:
+     - pkgs: {{ map.pkgs|json }}
+-- 
+2.21.0
+
